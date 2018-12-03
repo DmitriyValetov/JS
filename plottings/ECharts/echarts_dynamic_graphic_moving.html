@@ -1,0 +1,105 @@
+<!doctype html>
+    <html>
+
+    <head>
+    	<title>ECharts Sample</title>
+		<!--script src="http://echarts.baidu.com/dist/echarts.js"></script-->
+    	<script src="./echarts.min.js"></script>
+    </head>
+
+    <body>
+		<meta charset="UTF-8">
+        <div id="chart" style="width: 500px; height: 350px;"></div>
+        
+    	<script>
+    		var chart = document.getElementById('chart');
+    		var myChart = echarts.init(chart);
+            
+            var base = +new Date(2014, 9, 3);
+            var oneDay = 24 * 3600 * 1000;
+            var date = [];
+
+            var data = [Math.random() * 150];
+            var now = new Date(base);
+
+            function addData(shift) {
+                now = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/');
+                date.push(now);
+                data.push((Math.random() - 0.4) * 10 + data[data.length - 1]);
+
+                if (shift) {
+                    date.shift();
+                    data.shift();
+                }
+
+                now = new Date(+new Date(now) + oneDay);
+            }
+
+            for (var i = 1; i < 100; i++) {
+                addData();
+            }
+
+            option = {
+                title:{
+                    text: 'test the tooltip'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function (params) {
+                        params = params[0];
+                        var date = new Date(params.name);
+                        return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + '<br/>' + 'кексы по 50' + '<br/>' + 'яблоки по 100';
+                    },
+                    axisPointer: {
+                        animation: false
+                    }
+                },
+                dataZoom: [{
+                    startValue: '2014-06-01'
+                }, {
+                    type: 'inside'
+                }],
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: date
+                },
+                yAxis: {
+                    boundaryGap: [0, '50%'],
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name:'error value',
+                        type:'line',
+                        smooth:true,
+                        symbol: 'none',
+                        stack: 'a',
+                        areaStyle: {
+                            normal: {}
+                        },
+                        data: data
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+
+            setInterval(function () {
+                addData(true);
+                myChart.setOption({
+                    xAxis: {
+                        data: date
+                    },
+                    series: [{
+                        name:'error value',
+                        data: data
+                    }]
+                });
+            }, 500);
+
+        </script>
+        
+    </body>
+
+    </html>

@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      #container {
+        width : 600px;
+        height: 384px;
+        margin: 8px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <!--[if IE]>
+    <script type="text/javascript" src="/static/lib/FlashCanvas/bin/flashcanvas.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="./flotr2.js"></script>
+    <script type="text/javascript">
+      (function () {
+
+        var
+          container = document.getElementById('container'),
+          graph, offset, i;
+
+        var data = [];
+        var j = 0;
+        var t = new Date();
+        for (var i = 10; i >= 0; i--) {
+          var x = new Date(t.getTime() - i * 1000);
+          j++;
+          data.push([j, Math.random()]);
+        }
+
+        // Draw a sine curve at time t
+        function animate (data) {
+
+          // Draw Graph
+          graph = Flotr.draw(container, [ data ], {
+            yaxis : {
+              max : 2,
+              min : -2
+            }
+          });
+          
+          // Animate
+          setTimeout(function () {
+            
+            var x = new Date();  // current time
+            j++;
+            var y = Math.random();
+            // data = data.slice(0,100);
+
+            data.push([j, y]);
+            
+
+            animate(data);
+          
+          }, 10);
+        }
+
+        animate(data);
+      })();
+    </script>
+  </body>
+</html>
